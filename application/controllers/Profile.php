@@ -60,6 +60,7 @@ class ProfileController extends BaseController
     public function msgModule()
     {
         // get msg from db
+        //TODO refactor
         $msgModel = MessageModel::getInstance();
         $tid = intval($this->getRequest()->getRequest('tid'));
 

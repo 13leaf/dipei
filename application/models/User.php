@@ -109,6 +109,9 @@ class UserModel extends BaseModel
                     '$value'=>new Schema('lang',Constants::SCHEMA_INT)
                 ),
             )
+            +array( //client
+                'bg'=>new Schema('background',Constants::SCHEMA_STRING),//url
+            )
         ;
     }
 

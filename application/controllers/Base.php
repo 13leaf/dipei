@@ -86,6 +86,8 @@ class BaseController extends  Yaf_Controller_Abstract
 
     public function init()
     {
+        //TODO client token
+        //TODO client url
         //debug log
         $this->getLogger()->debug(sprintf('controller:%s,action:%s,params:%s',$this->getRequest()->controller,$this->getRequest()->action,json_encode($this->getRequest()->getRequest())));
 
@@ -235,6 +237,10 @@ class BaseController extends  Yaf_Controller_Abstract
     public function render($tpl,array $vars=null){
         if($this->getRequest()->getQuery('debug',false)){
             $this->dump();
+        }
+        if($this->getRequest()->getQuery('json',false)){
+            $this->render_ajax(0, '', $this->getView()->getAssigned());
+            return;
         }
         $renderPath=$this->getRenderPath();
         $this->assign(array('TEMPLATE'=>$renderPath));
