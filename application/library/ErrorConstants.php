@@ -63,4 +63,7 @@ interface ErrorConstants
     const CODE_NOT_FOUND_LIKE_OBJECT=-9000;
     const CODE_INVALID_LIKE_ID=-9001;
     const CODE_DUPLICATE_LIKE=-9002;
+
+    //client
+    const CODE_NEED_LOGIN=-10000;
 }

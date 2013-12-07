@@ -10,6 +10,7 @@ class RegControllerTest extends DipeiTestCase
 {
     public function testReg()
     {
+        Yaf_Registry::set('api',true);
         $request=new Test_Http_Request();
         $request->setRequestUri('/reg');
         $request->method = 'POST';
@@ -43,6 +44,7 @@ class RegControllerTest extends DipeiTestCase
      */
     public function testLogin()
     {
+        Yaf_Registry::set('api',true);
         $this->assertLogined(false);
         $request=new Test_Http_Request();
         $request->method = 'POST';
@@ -52,7 +54,7 @@ class RegControllerTest extends DipeiTestCase
             'password'=>'12345'
         ));
         $this->getYaf()->getDispatcher()->dispatch($request);
-        $this->expectOutputRegex('/"err":0/');
+        $this->assertAjaxCode(Constants::CODE_SUCCESS);
         $this->assertLogined(true);
 
         //test login with name

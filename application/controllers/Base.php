@@ -86,21 +86,29 @@ class BaseController extends  Yaf_Controller_Abstract
 
     public function init()
     {
-        //TODO client token
-        //TODO client url
         //debug log
         $this->getLogger()->debug(sprintf('controller:%s,action:%s,params:%s',$this->getRequest()->controller,$this->getRequest()->action,json_encode($this->getRequest()->getRequest())));
 
         $this->dataFlow=new AppDataFlow();
+        $this->dataFlow->isAPI=$this->isAPI();
 
         if (Yaf_Session::getInstance()->has('user')) {
             $this->user = UserModel::getInstance()->fetchOne(array('_id'=>Yaf_Session::getInstance()['user']['_id']));
-            unset($this->user['pw']);
+            $this->setCookie('UID', $this->user['_id']);
+        }else  if($this->isAPI()){  //XXX API
+            $token=$this->getRequest()->getQuery('token');
+            list($uid,$loginTime,$rand)=explode('_',base64_decode($token));
+            $user = UserModel::getInstance()->fetchOne(array('_id' => intval($uid)));
+            if(!empty($user) && $user['tk'] === $token){
+                $this->user=$user;
+            }
+        }
+
+        if(!empty($this->user)){
             $this->userId = $this->user['_id'];
             $this->getView()->assign(array('UID'=>$this->user['_id']));
             $this->dataFlow->fuids[]=$this->userId;
             $this->dataFlow->mergeOne('users', $this->user);
-            $this->setCookie('UID', $this->user['_id']);
         }
 
         $this->dataFlow->tids = array_merge($this->dataFlow->tids,range(1,1000));
@@ -153,7 +161,12 @@ class BaseController extends  Yaf_Controller_Abstract
      */
     public function handleInvalidateAuth()
     {
-        $this->redirect('/');
+        if(!$this->isAPI()){
+            $this->redirect('/');
+        }else{
+            $this->render_ajax(Constants::CODE_NEED_LOGIN,'');
+            exit;
+        }
     }
 
     public function assignViewedLepei()
@@ -234,9 +247,23 @@ class BaseController extends  Yaf_Controller_Abstract
         $this->getView()->assign($var);
     }
 
+    public function isAPI()
+    {
+        static $api=null;
+        if($api === null){
+            $api=Yaf_Application::app()->getConfig()->get('application')['api'] || Yaf_Registry::get('api');//
+        }
+        return $api;
+    }
+
     public function render($tpl,array $vars=null){
         if($this->getRequest()->getQuery('debug',false)){
             $this->dump();
+        }
+        //XXX API
+        if($this->isAPI()){
+            $this->render_ajax(0,'',$this->getView()->getAssigned());
+            return;
         }
         if($this->getRequest()->getQuery('json',false)){
             $this->render_ajax(0, '', $this->getView()->getAssigned());
@@ -257,6 +284,7 @@ class BaseController extends  Yaf_Controller_Abstract
 
     public function render_ajax($code,$message='',$data=null,$renderPath='', $renderData=null)
     {
+        header('Content-Type:application/json');
         if($this->getRequest()->getQuery('debug',false)){
             $this->dump();
         }
@@ -268,7 +296,8 @@ class BaseController extends  Yaf_Controller_Abstract
             $message = _e(GenErrorDesc::$descs[$code]);
         }
         $html='';
-        if(file_exists($this->getViewpath()[0].'/'.$renderPath) /* && !$this->getRequest()->isPost() */){
+        if(!$this->isAPI() &&
+            file_exists($this->getViewpath()[0].'/'.$renderPath) /* && !$this->getRequest()->isPost() */){
             $html = $this->getView()->render($renderPath,$renderData);
         }
         echo json_encode(array(

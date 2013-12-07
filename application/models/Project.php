@@ -30,6 +30,10 @@ class ProjectModel extends BaseModel
                 new Schema('travel_themes', Constants::SCHEMA_ARRAY),
                 '$value' => new Schema('theme', Constants::SCHEMA_INT) //tid
             ),
+            'ims'=>array(
+                new Schema('images',Constants::SCHEMA_ARRAY),
+                '$value'=>new Schema('image',Constants::SCHEMA_STRING)
+            ),
             'ts' => array(
                 new Schema('travel_services', Constants::SCHEMA_ARRAY),
                 '$value' => new Schema('service', Constants::SCHEMA_INT) //tid

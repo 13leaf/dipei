@@ -33,7 +33,16 @@ class LoginController extends BaseController
             $input=$this->getRequest()->getPost();
             $user=$userModel->login($userModel->format($input, true));
             if(!empty($user)){
-                $this->render_ajax(Constants::CODE_SUCCESS);
+                //XXX API
+                if($this->isAPI()){
+                    $token=$userModel->genToken($user);
+                    $this->dataFlow->mergeOne('users', $user);
+                    $this->assign($this->dataFlow->flow());
+                    $this->assign(array('token'=>$token));
+                    $this->render_ajax(Constants::CODE_SUCCESS,'',$this->getView()->getAssigned());
+                }else{
+                    $this->render_ajax(Constants::CODE_SUCCESS);
+                }
             }else{
                 $this->render_ajax(Constants::CODE_LOGIN_FAILED);
             }

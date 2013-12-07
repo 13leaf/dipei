@@ -23,8 +23,16 @@ class RegController extends BaseController{
         if($this->getRequest()->isPost()){
             $userModel=UserModel::getInstance();
             $input=$this->getRequest()->getPost();
-            $userModel->createUser($userModel->format($input,true));
-            $this->render_ajax(Constants::CODE_SUCCESS);
+            $uid=$userModel->createUser($userModel->format($input,true));
+            if($this->isAPI()){
+                $token=$userModel->genToken(array('_id'=>$uid));
+                $this->dataFlow->fuids[]=$uid;
+                $this->assign($this->dataFlow->flow());
+                $this->assign(array('token'=>$token));
+                $this->render_ajax(Constants::CODE_SUCCESS, '', $this->getView()->getAssigned());
+            }else{
+                $this->render_ajax(Constants::CODE_SUCCESS);
+            }
         }
         return false;
     }

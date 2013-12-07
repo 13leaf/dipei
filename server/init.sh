@@ -2,6 +2,7 @@
 yum update
 mkdir -p /data/logs/nginx
 mkdir -p /data/logs/lepei
+mkdir -p /data/logs/mongodb
 sudo chown -R www:www ..
 sudo chown -R www:www /data/logs
 rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
@@ -20,7 +21,7 @@ echo "extension=imagick.so" > /etc/php.d/imagick.ini
 pear config-set preferred_state beta
 pecl install mongo yaf
 printf "\n" | pecl install apc
-mkdir -p /data/db
+mkdir -p /data/mongodb /data/run
 extension_dir=$(php -r "echo ini_get('extension_dir');")
 #install imagick http://stackoverflow.com/questions/15569996/imagick-installation-on-webfaction
 if [[ ! -f $extension_dir/imagick.so ]]; then

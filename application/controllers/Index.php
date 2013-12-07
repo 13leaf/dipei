@@ -26,7 +26,7 @@ class IndexController extends BaseController {
         }
 
         // top users
-        $topUids = array(21,79,81,18,348);
+        $topUids = array(790,1218,81,18,348);
         $this->dataFlow->fuids = array_merge( $this->dataFlow->fuids, $topUids);
         $this->assign(array('top_user_list'=> $topUids));
         //right

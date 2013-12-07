@@ -111,6 +111,7 @@ class UserModel extends BaseModel
             )
             +array( //client
                 'bg'=>new Schema('background',Constants::SCHEMA_STRING),//url
+                'tk'=>new Schema('token',Constants::SCHEMA_STRING),
             )
         ;
     }
@@ -215,6 +216,14 @@ class UserModel extends BaseModel
             }
         });
         return $empty;
+    }
+
+    public function genToken($userInfo)
+    {
+        $token=
+            base64_encode(join('_',array($userInfo['_id'],time(),rand(100000000,99999999))));
+        $this->update(array('tk' => $token), array('_id' => $userInfo['_id']));
+        return $token;
     }
 
     /**

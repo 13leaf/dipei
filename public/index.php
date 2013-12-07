@@ -20,6 +20,10 @@ if(strcasecmp('backend',$base) === 0){
     $application = new Yaf_Application( ROOT_DIR . "/conf/backend.ini");
 
     $application->bootstrap()->run();
+}else if(strcasecmp('api',$base) === 0){
+    $application = new Yaf_Application( ROOT_DIR . "/conf/api.ini");
+
+    $application->bootstrap()->run();
 }else{
     $application = new Yaf_Application( ROOT_DIR . "/conf/application.ini");
 

@@ -8,6 +8,7 @@ class AppDataFlow
 {
     use AppComponent;
     use Strategy_Singleton;
+    public $isAPI=false;
 
     //------------in------------------
     public $tids=array();//translation ids
@@ -103,6 +104,7 @@ class AppDataFlow
                     $this->lids[] = $user['ctr'];
                 }
             }
+            unset($user['pw'],$user['tk']);
             if(isset($user['cts'])){
                 $this->tids = array_merge($this->tids, array_keys($user['cts']));
             }
@@ -117,6 +119,11 @@ class AppDataFlow
         }
     }
 
+    private function shortContent($content)
+    {
+        return strip_tags($content);
+    }
+
     public function mergeProjects(&$projects)
     {
         $projectModel=ProjectModel::getInstance();
@@ -129,6 +136,10 @@ class AppDataFlow
                 foreach($day['ls'] as $line){
                     $this->tids[]=$line+1000;
                     $this->lids[]=$line;
+                }
+                //XXX API
+                if($this->isAPI){
+                    $project['ds']['short_desc']=$this->shortContent($project['ds']['dsc']);
                 }
             }
             if(isset($project['tm'])) {
@@ -151,6 +162,10 @@ class AppDataFlow
         foreach($posts as $post){
             $this->uids[] = $post['uid'];
             $this->posts[$post['_id']] = $postModel->format($post);
+            //XXX API
+            if($this->isAPI){
+                $post['short_content']=$this->shortContent($post['content']);
+            }
             $this->lids[] = $post['lid'];
         }
     }
