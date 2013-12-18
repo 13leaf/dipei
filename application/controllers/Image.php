@@ -3,7 +3,6 @@
  * User: wangfeng
  * Date: 13-7-3
  * Time: 下午10:07
- * TODO add image 304
  */
 class ImageController extends BaseController
 {
