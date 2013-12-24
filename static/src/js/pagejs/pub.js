@@ -28,6 +28,17 @@ LP.use(['ueditor' , 'util' , 'html2json'] , function( UE , util , html2json){
 
             data.type = type;
             data.content = util.stringify( html2json.html2json(data.content) );
+
+            // validator 
+            if( !data.title || data.title.length > 50 ){
+                LP.error(_e('标题不能为空，且少于50个字'));
+                return false;
+            }
+            if( !data.content || data.content.length > 5000 ){
+                LP.error(_e('内容不能为空，且少于5000个字'));
+                return false;
+            }
+
             LP.ajax('addPost' , data , function(){
                 // refresh the page
                 LP.reload();

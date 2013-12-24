@@ -68,9 +68,12 @@ LP.use(['util'] , function( util ){
                 
                 LP.ajax('login' , data , function(){
                     location.href = location.href.replace(/#.*$/ , '');
-                } , function( msg ){
+                } , function( msg ,  ){
                     $lTip.show()
-                        .html( msg );
+                        .html( _e("用户名或者密码不对") );
+                    setTimeout(function(){
+                        $lTip.fadeOut();
+                    } , 3000);
                 });
                 return false;
             });
@@ -103,9 +106,18 @@ LP.use(['util'] , function( util ){
                 }
                 LP.ajax('reg' , data , function( e ){
                     location.href = location.href.replace(/#.*$/ , '');
-                } , function( msg ){
+                } , function( msg , result ){
+                    if( result.data ){
+                        for( var key in result.data ){
+                            msg = result.data[key];
+                            break;
+                        }
+                    }
                     $rTip.show()
                         .html( msg );
+                    setTimeout(function(){
+                        $rTip.fadeOut();
+                    } , 3000);
                 });
                 
                 return false;
