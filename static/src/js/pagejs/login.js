@@ -68,7 +68,7 @@ LP.use(['util'] , function( util ){
                 
                 LP.ajax('login' , data , function(){
                     location.href = location.href.replace(/#.*$/ , '');
-                } , function( msg ,  ){
+                } , function( msg ){
                     $lTip.show()
                         .html( _e("用户名或者密码不对") );
                     setTimeout(function(){
