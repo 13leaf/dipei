@@ -121,10 +121,8 @@ class DetailController extends BaseController
         $this->assign(array('likes'=> array_column( $likes , null , 'oid' )));
 
         // render nearby list
-        $viewUser = UserModel::getInstance()->fetch(
-            MongoQueryBuilder::newQuery()
-                    ->query(array('uid'=>$uid))
-                    ->build()
+        $viewUser = UserModel::getInstance()->fetchOne(
+                array( '_id'=>intval( $uid ) )
             );
 
         if( !empty( $viewUser['lid'] ) ){
@@ -133,14 +131,20 @@ class DetailController extends BaseController
             $parent = array_pop($location['pt']); 
             $location['pt'][]=$parent;
             $brothers = LocationModel::getInstance()->fetch(
-                MongoQueryBuilder::newQuery()->query(array('$and'=>array(array('pt' => $parent),array('ptc'=>$location['ptc']))))->sort(array('c.d'=>-1))->limit(20)->build()
+                MongoQueryBuilder::newQuery()
+                    ->query(array('$and'=>array(array('pt' => $parent),array('ptc'=>$location['ptc']))))
+                    ->sort(array('c.d'=>-1))
+                    ->limit(20)
+                    ->build()
             );
 
             $cityIds = array_column( $brothers , "_id" );
             $nearbyUsers = UserModel::getInstance()->fetch(
-                MongoQueryBuilder::newQuery()->query( array( 'lid'=>array("$in"=> $cityIds) , 'auth_status'=>2 ))->build()
+                MongoQueryBuilder::newQuery()
+                ->query( array( 'lid'=>array('$in'=> $cityIds) , 'auth_status'=>2 ))
+                ->limit(5)->build()
                 );
-            $this->assign(array('nearbyList'=> $nearbyUsers));
+            $this->assign(array('nearbyList'=> UserModel::getInstance()->format($nearbyUsers)));
         }
     }
 }
