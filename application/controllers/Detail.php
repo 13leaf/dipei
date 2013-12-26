@@ -141,7 +141,7 @@ class DetailController extends BaseController
             $cityIds = array_column( $brothers , "_id" );
             $nearbyUsers = UserModel::getInstance()->fetch(
                 MongoQueryBuilder::newQuery()
-                ->query( array( 'lid'=>array('$in'=> $cityIds) , 'auth_status'=>2 ))
+                ->query( array( 'lid'=>array('$in'=> $cityIds) ))
                 ->limit(5)->build()
                 );
             $this->assign(array('nearbyList'=> UserModel::getInstance()->format($nearbyUsers)));
