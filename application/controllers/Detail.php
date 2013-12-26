@@ -126,12 +126,17 @@ class DetailController extends BaseController
                     ->query(array('uid'=>$uid))
                     ->build()
             );
-        if( !empty( $viewUser['ctr'] ) ){
-            // get country city
-            $cities = LocationModel::getInstance()->fetch(
-                MongoQueryBuilder::newQuery()->query(array('pt.1' => $viewUser['ctr']))->build()
+
+        if( !empty( $viewUser['lid'] ) ){
+            //render brother loc_list
+            $location = LocationModel::getInstance()->fetchOne( array("_id"=> $viewUser['lid'] ) );
+            $parent = array_pop($location['pt']); 
+            $location['pt'][]=$parent;
+            $brothers = LocationModel::getInstance()->fetch(
+                MongoQueryBuilder::newQuery()->query(array('$and'=>array(array('pt' => $parent),array('ptc'=>$location['ptc']))))->sort(array('c.d'=>-1))->limit(20)->build()
             );
-            $cityIds = array_column( $cities , "_id" );
+
+            $cityIds = array_column( $brothers , "_id" );
             $nearbyUsers = UserModel::getInstance()->fetch(
                 MongoQueryBuilder::newQuery()->query( array( 'lid'=>array("$in"=> $cityIds) , 'auth_status'=>2 ))->build()
                 );
