@@ -119,5 +119,23 @@ class DetailController extends BaseController
         }
 
         $this->assign(array('likes'=> array_column( $likes , null , 'oid' )));
+
+        // render nearby list
+        $viewUser = UserModel::getInstance()->fetch(
+            MongoQueryBuilder::newQuery()
+                    ->query(array('uid'=>$uid))
+                    ->build()
+            );
+        if( !empty( $viewUser['ctr'] ) ){
+            // get country city
+            $cities = LocationModel::getInstance()->fetch(
+                MongoQueryBuilder::newQuery()->query(array('pt.1' => $viewUser['ctr']))->build()
+            );
+            $cityIds = array_column( $cities , "_id" );
+            $nearbyUsers = UserModel::getInstance()->fetch(
+                MongoQueryBuilder::newQuery()->query( array( 'lid'=>array("$in"=> $cityIds) , 'auth_status'=>2 ))->build()
+                );
+            $this->assign(array('nearbyList'=> $nearbyUsers));
+        }
     }
 }
