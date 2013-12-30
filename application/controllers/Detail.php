@@ -148,7 +148,7 @@ class DetailController extends BaseController
             for($i = 0 ; $i < 5 ; $i++){
                 $users[] = array_splice($nearbyUsers, rand(0 ,count($nearbyUsers)-1) , 1)[0];
             }
-            $this->assign(array('nearbyList'=> UserModel::getInstance()->format( $users )));
+            $this->assign(array('nearbyList'=> UserModel::getInstance()->formats( $users )));
         }
     }
 }
