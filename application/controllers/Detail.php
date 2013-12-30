@@ -145,7 +145,7 @@ class DetailController extends BaseController
                 ->limit(100)->build()
                 );
             $users = array();
-            for($i = 0 ; $i < 5 ; $i++){
+            for($i = 0 ; $i < 4 ; $i++){
                 $users[] = array_splice($nearbyUsers, rand(0 ,count($nearbyUsers)-1) , 1)[0];
             }
             $this->assign(array('nearbyList'=> UserModel::getInstance()->formats( $users )));
