@@ -2840,7 +2840,6 @@ input.input-widget2:focus {
   display: block;
   margin-left: 510px;
   bottom: 160px;
-  cursor: pointer;
   background: url("../image/qr.png") no-repeat;
 }
 
