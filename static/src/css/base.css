@@ -2832,6 +2832,17 @@ input.input-widget2:focus {
   top: 0;
   right: -7px;
 }
+.aside-qr{
+  position: fixed;
+  width: 68px;
+  height: 82px;
+  left: 50%;
+  display: block;
+  margin-left: 510px;
+  bottom: 160px;
+  cursor: pointer;
+  background: url("../image/qr.png") no-repeat;
+}
 
 /* line 386, ../scss/base.scss */
 .back-top {
@@ -2846,6 +2857,6 @@ input.input-widget2:focus {
   background: url('../image/back-top.png') no-repeat;
 }
 /* line 396, ../scss/base.scss */
-.back-top :hover {
+.back-top:hover {
   background-position: 0 -50px;
 }
