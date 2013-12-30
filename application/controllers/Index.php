@@ -19,11 +19,7 @@ class IndexController extends BaseController {
 
 
         $locids=array(373,621,403,564,649,500,520);
-
-        $locList = array();
-        for($i = 0 ; $i < 4 ; $i++){
-            $locList[] = array_splice($locids, rand(0 ,count($locids)-1) , 1)[0];
-        }
+        $locList = array_rand( $locids , 4 );
 
         // top users
         $topUids = array(790,1218,81,18,348);

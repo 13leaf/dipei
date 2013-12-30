@@ -141,10 +141,10 @@ class DetailController extends BaseController
             $cityIds = array_column( $brothers , "_id" );
             $nearbyUsers = UserModel::getInstance()->fetch(
                 MongoQueryBuilder::newQuery()
-                ->query( array( 'lid'=>array('$in'=> $cityIds) ))
-                ->limit(5)->build()
+                ->query( array( 'lid'=>$cityIds , 'l_t' => array('$in' , Constants::$LEPEI_TYPES) ) )
+                ->limit(100)->build()
                 );
-            $this->assign(array('nearbyList'=> UserModel::getInstance()->format($nearbyUsers)));
+            $this->assign(array('nearbyList'=> UserModel::getInstance()->format(array_rand( $nearbyUsers , 5) )));
         }
     }
 }
