@@ -141,7 +141,7 @@ class DetailController extends BaseController
             $cityIds = array_column( $brothers , "_id" );
             $nearbyUsers = UserModel::getInstance()->fetch(
                 MongoQueryBuilder::newQuery()
-                ->query( array( 'lid'=>$cityIds , 'l_t' => array('$in' , Constants::$LEPEI_TYPES) ) )
+                ->query( array( 'lid'=> array( '$in' => $cityIds ) , 'l_t' => array('$in' => Constants::$LEPEI_TYPES) ) )
                 ->limit(100)->build()
                 );
             $users = array();
