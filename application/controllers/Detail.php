@@ -144,7 +144,11 @@ class DetailController extends BaseController
                 ->query( array( 'lid'=>$cityIds , 'l_t' => array('$in' , Constants::$LEPEI_TYPES) ) )
                 ->limit(100)->build()
                 );
-            $this->assign(array('nearbyList'=> UserModel::getInstance()->format(array_rand( $nearbyUsers , 5) )));
+            $users = array();
+            for($i = 0 ; $i < 5 ; $i++){
+                $users[] = array_splice($nearbyUsers, rand(0 ,count($nearbyUsers)-1) , 1)[0];
+            }
+            $this->assign(array('nearbyList'=> UserModel::getInstance()->format( $users )));
         }
     }
 }
