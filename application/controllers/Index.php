@@ -18,7 +18,7 @@ class IndexController extends BaseController {
         $this->renderSearch();
 
 
-        $locids=array(373,621,403,564,649,500,520);
+        $locids=array(161,621,403,564,649,500,520);
 
         $locList = array();
         for($i = 0 ; $i < 4 ; $i++){
