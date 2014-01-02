@@ -122,7 +122,11 @@ class DipeiTestCase extends  PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->getYaf()->getDispatcher()->setView($this->view);
-        $this->view = new Twig_Adapter(APPLICATION_PATH.'/views', Yaf_Registry::get("config")->get("twig")->toArray());
+        $config=Yaf_Registry::get('config')->get('twig')->toArray();
+        $config['cache']=false;
+        $this->view = new Twig_Adapter(APPLICATION_PATH.'/views', $config);
+        $this->view->getEngine()->addExtension(new Twig_AppExtension());
+        $this->getYaf()->getDispatcher()->setView($this->view);
 
         //mock logger
         $mockLogger=$this->getMock('AppLogger');
