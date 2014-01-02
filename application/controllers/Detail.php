@@ -119,5 +119,40 @@ class DetailController extends BaseController
         }
 
         $this->assign(array('likes'=> array_column( $likes , null , 'oid' )));
+
+        // render nearby list
+        $viewUser = UserModel::getInstance()->fetchOne(
+                array( '_id'=>intval( $uid ) )
+            );
+
+        if( !empty( $viewUser['lid'] ) ){
+            //render brother loc_list
+            $location = LocationModel::getInstance()->fetchOne( array("_id"=> $viewUser['lid'] ) );
+            $parent = array_pop($location['pt']); 
+            $location['pt'][]=$parent;
+            $brothers = LocationModel::getInstance()->fetch(
+                MongoQueryBuilder::newQuery()
+                    ->query(array('$and'=>array(array('pt' => $parent),array('ptc'=>$location['ptc']))))
+                    ->sort(array('c.d'=>-1))
+                    ->limit(20)
+                    ->build()
+            );
+
+            $cityIds = array_column( $brothers , "_id" );
+            $nearbyUsers = UserModel::getInstance()->fetch(
+                MongoQueryBuilder::newQuery()
+                ->query( array( 'lid'=> array( '$in' => $cityIds ) , 'l_t' => array('$in' => Constants::$LEPEI_TYPES) ) )
+                ->limit(100)->build()
+                );
+            $users = array();
+            if( count($nearbyUsers) > 4 ){
+                for($i = 0 ; $i < 4 ; $i++){
+                    $users[] = array_splice($nearbyUsers, rand(0 ,count($nearbyUsers)-1) , 1)[0];
+                }
+            } else {
+                $users = $nearbyUsers;
+            }
+            $this->assign(array('nearbyList'=> UserModel::getInstance()->formats( $users )));
+        }
     }
 }
