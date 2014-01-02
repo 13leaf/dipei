@@ -367,7 +367,7 @@ abstract class BaseModel
             $this->validate($data);
             try{
                 $ret= array_merge(array('inserted'=>$inserted),$this->getCollection()->insert($data));
-                $this->getLogger()->info(sprintf('insert %s success',$this->getCollectionName()), $data);
+                $this->getLogger()->info(sprintf('insert %s success,id:%s',$this->getCollectionName(),$inserted), $data);
                 $this->clearCache();
                 return $ret;
             }catch (Exception $ex){
@@ -383,7 +383,7 @@ abstract class BaseModel
             }
             try{
                 $ret= array_merge(array('inserted' => $inserted), $this->getCollection()->batchInsert($data));
-                $this->getLogger()->info(sprintf('insert multi %s success',$this->getCollectionName()),$data);
+                $this->getLogger()->info(sprintf('insert multi %s,ids:%s success',$this->getCollectionName(),join(',',$inserted)),$data);
                 $this->clearCache();
                 return $ret;
             }catch (Exception $ex){

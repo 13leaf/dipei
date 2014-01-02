@@ -86,9 +86,6 @@ class BaseController extends  Yaf_Controller_Abstract
 
     public function init()
     {
-        //debug log
-        $this->getLogger()->debug(sprintf('controller:%s,action:%s,params:%s',$this->getRequest()->controller,$this->getRequest()->action,json_encode($this->getRequest()->getRequest())));
-
         $this->dataFlow=new AppDataFlow();
         $this->dataFlow->isAPI=$this->isAPI();
 
@@ -103,6 +100,9 @@ class BaseController extends  Yaf_Controller_Abstract
                 $this->user=$user;
             }
         }
+
+        //debug log
+        $this->getLogger()->debug(sprintf('controller:%s,action:%s,params:%s,UID:%s',$this->getRequest()->controller,$this->getRequest()->action,json_encode($this->getRequest()->getRequest()),$this->userId));
 
         if(!empty($this->user)){
             $this->userId = $this->user['_id'];
