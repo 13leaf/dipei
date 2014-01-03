@@ -47,6 +47,16 @@ class CityController extends BaseBackEndController
         $this->doLocationManage('update');
     }
 
+    public function locationChildrenAction($lid)
+    {
+        $lid = intval($lid);
+        $locationModel = LocationModel::getInstance();
+        $location = $locationModel->fetchOne(array('_id' => $lid));
+        $children=$locationModel->fetch(array('ptc'=>$location['ptc']+1,'pt'=>$location['_id']));
+        $this->render_ajax(0, '', array('children' => array_values($locationModel->formats($children))));
+        return false;
+    }
+
     public function doLocationManage($mode){
         $locationModel=LocationModel::getInstance();
         if($mode=='update'){
@@ -59,9 +69,9 @@ class CityController extends BaseBackEndController
 
         if($this->getRequest()->isPost()){
             $locationInfo=$locationModel->format($this->getRequest()->getPost('Location'),true);
-            $country = intval($this->getRequest()->getPost('country'));
-            $countryLoc = $locationModel->fetchOne(array('_id' => $country));
-            $path = $countryLoc['pt'];$path[]=$country;
+            $parent = intval($this->getRequest()->getPost('parent'));
+            $parentLoc = $locationModel->fetchOne(array('_id' => $parent));
+            $path = $parentLoc['pt'];$path[]=$parent;
             $locationInfo['pt'] = $path;
             if($mode=='update'){
                 $locationInfo['_id']=$lid;
@@ -77,7 +87,7 @@ class CityController extends BaseBackEndController
 
         $this->assign(array(
             'location'=>$location,
-            'COUNTRIES'=>$locationModel->getCountries()
+            'ROOT_LOCATIONS'=>$locationModel->fetch(array('ptc'=>0))
         ));
     }
 

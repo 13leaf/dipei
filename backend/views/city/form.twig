@@ -31,17 +31,59 @@
         <label>中文名称</label> <input name="Location[name]" value="{{ location.name }}"> <span class="required">(必填)</span>
     </div>
     <div class="row">
-        <label>所属国家</label>
-        <select name="country">
-            {% for lid,loc in COUNTRIES %}
-                <option value="{{lid}}" {% if lid in location.path  %}selected="selected" {% endif %}>{{loc.n}}</option>
-            {% endfor %}
-        </select>
+        <label>所属层级</label>
+        <div class="location-chooser-wrapper">
+            <select data-level='0' class="location-chooser">
+                <option disabled selected>请选择</option>
+                {% for lid,loc in ROOT_LOCATIONS %}
+                    <option value="{{lid}}" {% if lid in location.path  %}selected="selected" {% endif %}>{{loc.n}}</option>
+                {% endfor %}
+            </select>
+            <a class="next-children" data-level='0' href="#">下一级></a>
+        </div>
         <span class="required">(必填)</span>
     </div>
     <div class="row">
         <label>城市简介</label>
         <textarea name="Location[desc]" rows="7">{{ location.desc  }}</textarea>
     </div>
-    <input type="submit" value="提交资料" style="margin-left: 30px; width:150px;">
+    <input id='btnLocSubmit' type="submit" value="提交资料" style="margin-left: 30px; width:150px;">
 </form>
+<script>
+    //add next
+    $(document.body).on('click','a.next-children',function(){
+        var level=$(this).data('level');
+        if($('a.next-children:last').data('level') != level){
+            return;
+        }
+        var lid = $('select.location-chooser:eq('+level+')').val();
+        if(!lid){
+            alert(level+'层级丢失!');
+            return;
+        }
+        $.getJSON('locationChildren/lid/'+lid,function(data){
+            if(data.err){
+                alert(data.msg);
+            }else{
+                var children=data.data.children;
+                var newSelect = $('<select data-level="'+(level+1)+'" class="location-chooser"><option disabled selected>请选择</option></select>');
+                var newNext=$('<a class="next-children" data-level="'+(level+1)+'" href="#">下一级></a>');
+                for(var i=0;i<children.length;i++){
+                    newSelect.append($('<option value="'+children[i].id+'">'+children[i].name+'</option>'));
+                }
+                $('.location-chooser-wrapper').append(newSelect).append(newNext);
+                $('select.location-chooser:eq('+level+')').attr('disabled','disabled');
+            }
+        });
+    });
+    $('#btnLocSubmit').click(function(e){
+        var parentLid=$('select.location-chooser:last').val();
+        if(!parentLid){
+            alert('对不起，请选择父级!');
+            e.preventDefault();
+        }else{
+            $('select.location-chooser').removeAttr('name');
+            $('select.location-chooser:last').attr('name','parent');
+        }
+    });
+</script>
