@@ -8,10 +8,11 @@ class ImageController extends BaseController
 {
     public function validateAuth()
     {
+        //XXX !!!action name auto convert lowercase
         if($this->getRequest()->getActionName() == 'avatar'
             || $this->getRequest()->getActionName() == 'upload'
-            || $this->getRequest()->getActionName() == 'uploadForEditor'
-            || $this->getRequest()->getActionName() == 'uploadUserPhoto'){
+            || $this->getRequest()->getActionName() == 'uploadforeditor'
+            || $this->getRequest()->getActionName() == 'uploaduserphoto'){
             if(empty($this->user)){
                 throw new AppException(Constants::CODE_NO_PERM, 'not logined');
             }
