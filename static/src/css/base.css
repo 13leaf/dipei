@@ -2119,7 +2119,7 @@ textarea {
   border: none;
   background: none;
   position: absolute;
-  padding-left: 0;
+  padding-left: 0px;
   right: 31px;
   left: 0;
   float: left;
