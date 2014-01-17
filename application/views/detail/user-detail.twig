@@ -79,7 +79,7 @@
             {% if UID %}
                 {% for ctid , cval in user.contacts %}
                     {% if cval %}
-                    <span>{{ TRANSLATES[ctid] }}</span>: <span class="mgr10">{{cval}}
+                    <span>{{ TRANSLATES[ctid] }}</span>: <span class="mgr10 c999">{{cval}}
                     {#  如果是qq #}
                     {% if ctid == 92 %}
                         {{_e('(验证说明：鲜旅客)')}}
