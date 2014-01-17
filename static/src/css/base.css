@@ -2839,7 +2839,7 @@ input.input-widget2:focus {
   left: 50%;
   display: block;
   margin-left: 510px;
-  bottom: 250px;
+  bottom: 220px;
   background: url("../image/qr.png") no-repeat;
 }
 
@@ -2850,7 +2850,7 @@ input.input-widget2:focus {
   height: 50px;
   left: 50%;
   margin-left: 510px;
-  bottom: 190px;
+  bottom: 160px;
   cursor: pointer;
   display: none;
   background: url('../image/back-top.png') no-repeat;
