@@ -2119,11 +2119,11 @@ textarea {
   border: none;
   background: none;
   position: absolute;
-  padding: 10px;
+  padding-left: 0;
   right: 31px;
   left: 0;
   float: left;
-  margin: 1px;
+  margin: 1px 10px;
   /*
   display: -webkit-box;
   display: -ms-box;
