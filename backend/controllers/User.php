@@ -45,11 +45,11 @@ class UserController extends  BaseBackEndController{
             $this->render_ajax(Constants::CODE_LACK_FIELD, '昵称不能为空!');
         }else{
             $updateInfo = array(
-                '_id'=>$uid,
+                '_id'=>intval($uid),
                 'n'=>$nick
             );
             $userModel->update($updateInfo);
-            $this->render_ajax(Constants::CODE_VALIDATOR_ERROR);
+            $this->render_ajax(Constants::CODE_SUCCESS);
         }
         return false;
     }
