@@ -36,9 +36,15 @@ class ErrorController extends BaseBackEndController {
 //            }
 //            $this->render_ajax($exception->getCode(), $exception->getMessage(),$exception->getContext());
 //        }else{
+        if($exception instanceof AppException){
+            header("HTTP/1.1 200 OK");
+            $this->render_ajax($exception->getCode(), $exception->getMessage(),$exception->getContext());
+        }else{
             $this->getLogger()->warn($exception->getMessage().":\n".$exception->getTraceAsString());
             $this->getView()->assign("exception", $exception);
             var_dump($exception);
+        }
+        return false;
 //        }
 		//5. render by Yaf
 	}

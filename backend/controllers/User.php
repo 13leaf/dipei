@@ -26,6 +26,34 @@ class UserController extends  BaseBackEndController{
         return false;
     }
 
+    public function resetPwdAction($uid){
+        $userModel=UserModel::getInstance();
+        $updateInfo=array(
+            '_id'=>intval($uid),
+            'pw'=>md5('123456')
+        );
+        $userModel->update($updateInfo);
+        $this->render_ajax(Constants::CODE_SUCCESS);
+        return false;
+    }
+
+    public function setNickAction($uid)
+    {
+        $userModel=UserModel::getInstance();
+        $nick=$this->getRequest()->getQuery('nick');
+        if(empty($nick)){
+            $this->render_ajax(Constants::CODE_LACK_FIELD, '昵称不能为空!');
+        }else{
+            $updateInfo = array(
+                '_id'=>$uid,
+                'n'=>$nick
+            );
+            $userModel->update($updateInfo);
+            $this->render_ajax(Constants::CODE_VALIDATOR_ERROR);
+        }
+        return false;
+    }
+
     /**
      */
     public function makeQuery()
@@ -102,11 +130,14 @@ class UserController extends  BaseBackEndController{
             case 'last_time':
                 return date('Y-m-d', $user['o_t']->sec) . '/' . date('Y-m-d', $user['c_t']->sec);
             case 'options':
+                $setNick = sprintf('<a href="#" data-action="setNick" data-id="%s">修改昵称</a>',$user['_id']);;
+                $resetPwd = sprintf('<a href="#" data-action="resetPwd" data-id="%s">重置用户密码</a>',$user['_id']);;
                 if($user['sd']){
-                    return sprintf('<a href="#" data-action="cancelSeed" data-id="%s">取消种子标记</a>',$user['_id']);
+                    $flagSeed = sprintf('<a href="#" data-action="cancelSeed" data-id="%s">取消种子标记</a>',$user['_id']);
                 }else{
-                    return sprintf('<a href="#" data-action="seed" data-id="%s">标记为种子</a>',$user['_id']);
+                    $flagSeed = sprintf('<a href="#" data-action="seed" data-id="%s">标记为种子</a>',$user['_id']);
                 }
+                return $flagSeed .'/'. $setNick .'/'. $resetPwd;
         }
        return $user[$column];
     }

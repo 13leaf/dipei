@@ -103,7 +103,7 @@
         $('[data-action=seed]').click(function(){
             var $ele = $(this);
             var id = $ele.data('id');
-            $.get('user/seed/uid/'+id,function(data){
+            $.getJSON('user/seed/uid/'+id,function(data){
                 if(data.err){
                     alert(data.msg);
                 }else{
@@ -114,13 +114,44 @@
         $('[data-action=cancelSeed]').click(function(){
             var $ele = $(this);
             var id = $ele.data('id');
-            $.get('user/cancelSeed/uid/'+id,function(data){
+            $.getJSON('user/cancelSeed/uid/'+id,function(data){
                 if(data.err){
                     alert(data.msg);
                 }else{
                     location.reload();
                 }
             });
+        });
+        $('[data-action=setNick]').click(function(){
+            var $ele = $(this);
+            var id = $ele.data('id');
+            var nick = prompt('请输入用户昵称');
+            if(nick){
+                $.getJSON('user/setNick/uid/'+id+"?nick="+nick,function(data){
+                    if(data.err){
+                        if(data.data){
+                            alert(data.data.name.join(','));
+                        }else{
+                            alert(data.msg);
+                        }
+                    }else{
+//                        location.reload();
+                    }
+                });
+            }
+        });
+        $('[data-action=resetPwd]').click(function(){
+            var $ele = $(this);
+            var id = $ele.data('id');
+            if(confirm('确认重置uid为'+$ele.data('id')+'的密码吗?')){
+                $.get('user/resetPwd/uid/'+id,function(data){
+                    if(data.err){
+                        alert(data.msg);
+                    }else{
+                        alert('密码已重置为123456');
+                    }
+                });
+            }
         });
     });
 

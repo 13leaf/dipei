@@ -8,6 +8,7 @@ class BackDoorController extends BaseController
 {
     public function validateAuth()
     {
+        return false;
         return true;
         return
             AppHelper::getInstance()->isSuperUser($this->userId)||AppHelper::getInstance()->isInternalNet();
