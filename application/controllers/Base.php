@@ -163,6 +163,7 @@ class BaseController extends  Yaf_Controller_Abstract
     {
         if(!$this->isAPI()){
             $this->redirect('/');
+            exit;
         }else{
             $this->render_ajax(Constants::CODE_NEED_LOGIN,'');
             exit;
