@@ -112,4 +112,19 @@ class AjaxController extends BaseController
         $this->render_ajax(Constants::CODE_SUCCESS);
         return false;
     }
+
+    public function nearAction()
+    {
+        $lat=$this->getRequest()->getRequest('lat');
+        $lng=$this->getRequest()->getRequest('lng');
+    }
+
+    public function locNamesAction(){
+        $lpt=3;
+        $locationModel=LocationModel::getInstance();
+        $locations=$locationModel->fetch(array('ptc' => $lpt),array('n'=>true));
+        $this->dataFlow->mergeLocations($locations);
+        $this->render_ajax(Constants::CODE_SUCCESS, $this->dataFlow->flow());
+        return false;
+    }
 }
