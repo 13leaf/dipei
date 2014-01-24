@@ -296,6 +296,13 @@ class BaseController extends  Yaf_Controller_Abstract
         if(empty($message) && isset(GenErrorDesc::$descs[$code])){
             $message = _e(GenErrorDesc::$descs[$code]);
         }
+        if($this->isAPI() && is_array($data)){
+            foreach($data as $k=>$v){
+                if($k != 'TRANSLATES' && is_array($v)){
+                    $data[$k] = array_values($v);
+                }
+            }
+        }
         $html='';
         if(!$this->isAPI() &&
             file_exists($this->getViewpath()[0].'/'.$renderPath) /* && !$this->getRequest()->isPost() */){
