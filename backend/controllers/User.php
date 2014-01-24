@@ -28,12 +28,21 @@ class UserController extends  BaseBackEndController{
 
     public function resetPwdAction($uid){
         $userModel=UserModel::getInstance();
+        $length=8;
+        $pass = '';
+        while($length>0){
+            $ch = chr(rand(60, 172));
+            if(preg_match('/\w/',$ch)){
+                $pass.=$ch;
+                $length--;
+            }
+        }
         $updateInfo=array(
             '_id'=>intval($uid),
-            'pw'=>md5('123456')
+            'pw'=>md5($pass)
         );
         $userModel->update($updateInfo);
-        $this->render_ajax(Constants::CODE_SUCCESS);
+        $this->render_ajax(Constants::CODE_SUCCESS,'',array('pw'=>$pass));
         return false;
     }
 

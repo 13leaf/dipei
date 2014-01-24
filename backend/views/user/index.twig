@@ -144,11 +144,11 @@
             var $ele = $(this);
             var id = $ele.data('id');
             if(confirm('确认重置uid为'+$ele.data('id')+'的密码吗?')){
-                $.get('user/resetPwd/uid/'+id,function(data){
+                $.getJSON('user/resetPwd/uid/'+id,function(data){
                     if(data.err){
                         alert(data.msg);
                     }else{
-                        alert('密码已重置为123456');
+                        alert('密码已重置为'+data.data.pw);
                     }
                 });
             }
