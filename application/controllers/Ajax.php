@@ -124,7 +124,7 @@ class AjaxController extends BaseController
         $locationModel=LocationModel::getInstance();
         $locations=$locationModel->fetch(array('ptc' => $lpt),array('n'=>true));
         $this->dataFlow->mergeLocations($locations);
-        $this->render_ajax(Constants::CODE_SUCCESS, $this->dataFlow->flow());
+        $this->render_ajax(Constants::CODE_SUCCESS,'',$this->dataFlow->flow());
         return false;
     }
 }
