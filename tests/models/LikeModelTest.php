@@ -19,7 +19,7 @@ class LikeModelTest extends DipeiTestCase
         $id=UserModel::getInstance()->createUser(array(
             'em'=>'wang@jj.com',
             'n'=>'wang',
-            'pwd'=>'123'
+            'pw'=>'123'
         ));
         ProjectModel::getInstance()->addProject(array(
             '_id'=>11,

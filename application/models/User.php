@@ -128,6 +128,9 @@ class UserModel extends BaseModel
 
     public function createUser($userInfo)
     {
+        if(empty($userInfo['n']) || empty($userInfo['em']) || empty($userInfo['pw'])){
+            throw new AppException(Constants::CODE_LACK_FIELD);
+        }
         $user=array(
             'n'=>$userInfo['n'],
             'em'=>$userInfo['em'],

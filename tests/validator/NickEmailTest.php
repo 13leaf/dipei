@@ -46,11 +46,11 @@ class NickEmailTest extends DipeiTestCase
     {
         return array(
             array(
-                array(array('em'=>'wang@lepei.com','n'=>'wang@lepei.com')),
+                array(array('em'=>'wang@lepei.com','n'=>'wang@lepei.com','pw'=>'xxx')),
                 array(false)
             ),
             array(
-                array(array('em'=>'wang@lepei.com','n'=>'wang'),array('em'=>'feng@lepei.com','n'=>'wang@lepei.com'),array('em'=>'wang@lepei.com','n'=>'wang')),
+                array(array('em'=>'wang@lepei.com','n'=>'wang','pw'=>'xxx'),array('em'=>'feng@lepei.com','n'=>'wang@lepei.com','pw'=>'xxx'),array('em'=>'wang@lepei.com','n'=>'wang','pw'=>'xxx')),
                 array(true,true,false)
             ),
         );
