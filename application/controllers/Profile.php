@@ -138,7 +138,8 @@ class ProfileController extends BaseController
         );
         $this->dataFlow->mergeUsers( $msgUsers );
 
-        $this->assign(array("msgs"=> $msgModel->formats($msgs , true)));
+        $this->dataFlow->mergeMessages($msgs);
+//        $this->assign(array("msgs"=> $msgModel->formats($msgs , true)));
         UserModel::getInstance()->clearCount($this->userId,'msgs.m');
 
     }

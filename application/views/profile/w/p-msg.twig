@@ -4,7 +4,7 @@
 <section class="p-msg">
     <p class="yahei fs20">{{_e('私信')}}</p>
     <ul class="msg-list msggroup-list">
-        {% for msg in msgs %}
+        {% for msg in MESSAGES %}
         {% set tid = msg.uid == UID ? msg.tid : msg.uid %}
         <li class="msg-item clearfix" data-a="msg-block" data-d="uid={{tid}}">
             <div class="fl msg-head">
@@ -50,7 +50,7 @@
             </form>
         </div>
         <ul class="msg-list">
-            {% include "profile/w/_p-msg-items.twig" with {msgs: msgs} %}
+            {% include "profile/w/_p-msg-items.twig" with {msgs: MESSAGES} %}
         </ul>
         {% include "widget/page.twig" %}
     </div>
