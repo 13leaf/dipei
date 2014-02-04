@@ -296,6 +296,7 @@ class BaseController extends  Yaf_Controller_Abstract
         if(empty($message) && isset(GenErrorDesc::$descs[$code])){
             $message = _e(GenErrorDesc::$descs[$code]);
         }
+        //FIXME pagination
         if($this->isAPI() && is_array($data)){
             foreach($data as $k=>$v){
                 if($k != 'TRANSLATES' && is_array($v)){

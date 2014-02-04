@@ -104,6 +104,7 @@ abstract class BaseModel
     }
 
     public function fetchOne($condition=array(),$fields=array()){
+        $condition['$limit']=1;
         $rets = $this->fetch($condition, $fields, Constants::INDEX_MODE_ARRAY);
         return array_shift($rets);
 

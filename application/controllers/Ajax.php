@@ -115,8 +115,28 @@ class AjaxController extends BaseController
 
     public function nearAction()
     {
-        $lat=$this->getRequest()->getRequest('lat');
-        $lng=$this->getRequest()->getRequest('lng');
+        $lat = intval($this->getRequest()->getRequest('lat'));
+        $lng = intval($this->getRequest()->getRequest('lng'));
+        $page = intval($this->getPage());
+        $pageSize = intval($this->getRequest()->getRequest('pageSize', Constants::LIST_LOC_USER_SIZE));
+
+        $locationModel=LocationModel::getInstance();
+        $userModel=UserModel::getInstance();
+
+        $nearestLocation = $locationModel->fetchOne(array('ptc'=>2,'geo'=>array('$near'=>[$lng,$lat])));
+        $query=array('lid'=>$nearestLocation['_id'],'l_t'=>array('$gt'=>0));
+        $users = $userModel->fetch(
+            MongoQueryBuilder::newQuery()->query($query)->skip(($page-1)*$pageSize)->limit($pageSize)->build()
+        );
+        $count = $userModel->count($query);
+
+        $this->dataFlow->mergeUsers($users);
+        $this->assign(array('nearLid'=>$nearestLocation['_id']));
+        $this->assign(array('nearUsers'=>array_keys($users)));
+        $this->assign($this->dataFlow->flow());
+        $this->assign($this->getPagination($page, $pageSize, $count));
+        $this->render_ajax(Constants::CODE_SUCCESS, '', $this->getView()->getAssigned());
+        return false;
     }
 
     public function locNamesAction(){
