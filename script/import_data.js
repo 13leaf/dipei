@@ -50,6 +50,15 @@ function iterator(folders,loc)
                         'ptc':path.length,
                         'ims':ims
                     };
+                    if(data.map_info){
+                        var geo = data.map_info.split(',').map(parseFloat);
+                        if(geo && geo.length == 1){
+                            geo = data.map_info.split('，').map(parseFloat);
+                        }
+                        if(geo && geo.length==2){
+                            record['geo']=geo;
+                        }
+                    }
                     smap[data.sid]=record['_id'];
                     loc.insert(record,function(err,rec) {
                        //do nothing
